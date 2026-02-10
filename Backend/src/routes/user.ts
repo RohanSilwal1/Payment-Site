@@ -1,6 +1,6 @@
 import express from "express";
 import { success, z } from "zod"
-import { userModel } from "../db";
+import { Account, userModel } from "../db";
 import jwt from "jsonwebtoken"
 import dotenv from "dotenv"
 import { middlewares } from "../middlewares";
@@ -49,12 +49,16 @@ router.post("/signup", async (req, res) => {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
     })
+
+    const userId = user._id;
+    await Account.create({
+        userId,
+        balance: 1 + Math.random() * 10000
+    })
     res.status(200).json({
         message: "user created sucessfully"
     })
-
 })
-
 
 const SigninBody = z.object({
     username: z.string(),
@@ -123,35 +127,35 @@ router.put("/", middlewares, async (req, res) => {
     }
 })
 router.get("/bulk", async (req, res) => {
-    
+
     const filter = (req.query.filter as string) || "";
-    
-    
+
+
     const users = await userModel.find({
         $or: [{
             firstName: {
-                $regex: `^${filter}`,$options:'i'
+                $regex: `^${filter}`, $options: 'i'
             }
         }, {
             lastName:
-            {$regex: `^${filter}`,$options:"i" }
+                { $regex: `^${filter}`, $options: "i" }
         }
-    ]
-})
-res.json({
-    users:users.map(user => ({
-        username: user.username,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        _id: user._id 
-    }))
-})
+        ]
+    })
+    res.json({
+        users: users.map(user => ({
+            username: user.username,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            _id: user._id
+        }))
+    })
 })
 
-router.get("/test", async(req,res)=>{
+router.get("/test", async (req, res) => {
 
     res.json({
-        message:"test is working"
+        message: "test is working"
     })
 })
 export default router;

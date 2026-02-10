@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import dotenv from "dotenv";
 import jwt, { JwtPayload } from "jsonwebtoken";
 interface CustomJwtPayload extends JwtPayload {
-  userId: string;
+    userId: string;
 }
 
 export function middlewares(req: Request, res: Response, next: NextFunction) {
@@ -28,15 +28,15 @@ export function middlewares(req: Request, res: Response, next: NextFunction) {
             message: 'Token missing from Authorization header',
         });
     }
-    
+
     try {
-        const decoded = jwt.verify(token, JWT_SECRET)as CustomJwtPayload;
-        req.userId=decoded.userId;
+        const decoded = jwt.verify(token, JWT_SECRET) as CustomJwtPayload;
+        req.userId = decoded.userId;
         next();
     } catch (err) {
-    return res.status(401).json({
-      message: "Invalid token",
-    });
-  }
- 
+        return res.status(401).json({
+            message: "Invalid token",
+        });
+    }
+
 }
