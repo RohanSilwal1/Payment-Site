@@ -18,7 +18,7 @@ export default function SignIn() {
             <InputBox label="Password" placeholder="12345678" />
             </div>
             <Button label="Signup" onClick={() => { }} />
-            <ButtonWarning buttonText="Sign up" label="Don't have an account? " to={"/Sign up"} />
+            <ButtonWarning buttonText="Sign up" label="Don't have an account? " to={"/dashboard"} />
 
         </div>
 
