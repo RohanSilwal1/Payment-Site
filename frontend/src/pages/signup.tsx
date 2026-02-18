@@ -6,7 +6,6 @@ import InputBox from "../components/Input";
 import SubHeading from "../components/SubHeading";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
 export default function Signup() {
   const [firstName, setfirstName] = useState("");
   const [lastName, setlastName] = useState("");
@@ -15,15 +14,8 @@ export default function Signup() {
   const [message, setmessage] = useState("");
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const navigate=useNavigate();
-  console.log(`firstName ${firstName}`);
-  console.log(`lastName ${lastName}`);
-  console.log(`email ${email}`);
-  console.log(`password ${password}`);
-  console.log("BE  "+backendUrl);
-
   async function signup() {
       setmessage("")
-
     try {      
      const response=await axios.post(`${backendUrl}/api/v1/user/signup`, {
         firstName: firstName,
@@ -33,7 +25,6 @@ export default function Signup() {
       });
       setmessage("Signup successful!")
       navigate("/signin")
-
     }  catch (error:any) {
       if(error.response){
         setmessage(error.response.data.message ||"Signup Failed")
@@ -77,7 +68,10 @@ export default function Signup() {
           onChange={(e) => setpassword(e.target.value)}
         />
         <Button label="Signup" onClick={() => {signup()}} />
+        <div className="text-center bg-red-400 rounded-2xl text-neutral-950 font-semibold">
           {message && <p>{message}</p>}
+        </div>
+
         <ButtonWarning
           buttonText="Sign in"
           label="Already have an account? "

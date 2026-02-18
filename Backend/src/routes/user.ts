@@ -20,7 +20,7 @@ const router = express.Router();
 console.log("✅ user routes loaded");
 
 const SignupBody = z.object({
-    username: z.string().min(3, { message: "Username must be atleast three character long" }).max(20, { message: "Username must be no longer then 20" }),
+    username: z.string().min(3, { message: "Email must be atleast three character long" }).max(20, { message: "Email must be no longer then 20" }),
     password: z.string().min(8, { message: "Password must be 8 char long" }).max(30, { message: "Password must be longer than 30 characters" }).regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/, { message: "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character" }),
     firstName: z.string().min(3, { message: "First Name must be atleast three character long" }).max(20, { message: "First Name must be no longer then 20" }),
     lastName: z.string().min(3, { message: "Last Name must be atleast three character long" }).max(20, { message: "Last Name must be no longer then 20" }),
@@ -60,20 +60,19 @@ router.post("/signup", async (req, res) => {
 })
 
 const SigninBody = z.object({
-    username: z.string(),
-    password: z.string()
+    username: z.string().min(3, { message: "Email must be atleast three character long" }).max(20, { message: "Email must be no longer then 20" }),
+    password: z.string().min(8, { message: "Password must be 8 char long" }).max(30, { message: "Password must be longer than 30 characters" }).regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/, { message: "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character" }),
 })
 
 
 router.post("/signin", async (req, res) => {
 
     const JWT_SECRET = process.env.JWT_SECRET as string;
-    const { success } = SigninBody.safeParse(req.body);
-
-    if (!success) {
-        return res.status(411).json({
-            message: "invalid input"
-        })
+    const result = SigninBody.safeParse(req.body);
+    if (!result.success) {
+        return res.status(400).json({
+            message: result.error.issues?.[0]?.message || "Invalid input"
+        });
     }
     const user = await userModel.findOne({
         username: req.body.username,
