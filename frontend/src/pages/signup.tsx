@@ -1,28 +1,88 @@
+import { useState } from "react";
 import Button from "../components/button";
 import ButtonWarning from "../components/buttonWarning";
 import Heading from "../components/Heading";
 import InputBox from "../components/Input";
 import SubHeading from "../components/SubHeading";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function Signup() {
+  const [firstName, setfirstName] = useState("");
+  const [lastName, setlastName] = useState("");
+  const [email, setemail] = useState("");
+  const [password, setpassword] = useState("");
+  const [message, setmessage] = useState("");
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  const navigate=useNavigate();
+  console.log(`firstName ${firstName}`);
+  console.log(`lastName ${lastName}`);
+  console.log(`email ${email}`);
+  console.log(`password ${password}`);
+  console.log("BE  "+backendUrl);
+
+  async function signup() {
+      setmessage("")
+
+    try {      
+     const response=await axios.post(`${backendUrl}/api/v1/user/signup`, {
+        firstName: firstName,
+        lastName: lastName,
+        username: email,
+        password: password,
+      });
+      setmessage("Signup successful!")
+      navigate("/signin")
+
+    }  catch (error:any) {
+      if(error.response){
+        setmessage(error.response.data.message ||"Signup Failed")
+      }
+      else{
+        setmessage("Server not reachable");
+      }
+    }}
+
   return (
     <div className="h-screen flex justify-center ">
       <div className="rounded-lg bg-white w-100 p-2 h-max px-4 pt-9">
         <Heading label="Sign up" />
         <SubHeading label="Enter your information to create an account " />
-        <InputBox label="First Name" placeholder="John the" type="text" />
-        <InputBox label="Last Name" placeholder="Don" type="text" />
+        <InputBox
+          label="First Name"
+          placeholder="John the"
+          type="text"
+          value={firstName}
+          onChange={(e) => setfirstName(e.target.value)}
+        />
+        <InputBox
+          label="Last Name"
+          placeholder="Don"
+          type="text"
+          value={lastName}
+          onChange={(e) => setlastName(e.target.value)}
+        />
         <InputBox
           label="Email"
           placeholder="johnthedon@gmail.com"
           type="email"
+          value={email}
+          onChange={(e) => setemail(e.target.value)}
         />
-        <InputBox label="Password" placeholder="12345678" type="password" />
-        <Button label="Signup" onClick={() => {}} />
+        <InputBox
+          label="Password"
+          placeholder="12345678"
+          type="password"
+          value={password}
+          onChange={(e) => setpassword(e.target.value)}
+        />
+        <Button label="Signup" onClick={() => {signup()}} />
+          {message && <p>{message}</p>}
         <ButtonWarning
           buttonText="Sign in"
           label="Already have an account? "
           to={"/signin"}
+          
         />
       </div>
     </div>
