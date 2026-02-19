@@ -124,7 +124,7 @@ router.put("/", middlewares, async (req, res) => {
 
     }
 })
-router.get("/bulk", async (req, res) => {
+router.get("/bulk",middlewares, async (req, res) => {
 
     const filter = (req.query.filter as string) || "";
 
