@@ -22,9 +22,7 @@ export default function SignIn() {
         password: password,
       });
       let token = response.data.token;
-      if (token.startsWith("Bearer ")) {
-        token = token.substring(7);
-      }
+      
       localStorage.setItem("token", token);
       setmessage("Signin successful!");
       navigate("/dashboard")
