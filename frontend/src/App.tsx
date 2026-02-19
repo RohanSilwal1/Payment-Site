@@ -4,17 +4,20 @@ import Signin from "./pages/signin";
 import Dashboard from "./pages/dashboard";
 import Send from "./pages/send";
 import "./App.css";
+import Me from "./pages/me";
 
 function App() {
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Signup />} />
+          <Route path="/" element={<Me />} />
+          <Route path="*" element={<Me />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/signin" element={<Signin />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/send" element={<Send />} />
+          <Route path="/me" element={<Me />} />
         </Routes>
       </BrowserRouter>
     </>

@@ -13,7 +13,18 @@ export default function Dashboard() {
   const backendUrl = import.meta.env.VITE_BACKEND_URL;
   const [balance, Setbalance] = useState(0);
   const [users, setUser] = useState<UserType[]>([]);
-  const [filter,setFilter]=useState("")
+  const [filter, setFilter] = useState("");
+
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+  //this is just an eg
+
+  useEffect(() => {
+    if (!token) {
+      navigate("/signup");
+    }
+  }, [token, navigate]);
+
   async function getbalance() {
     try {
       const response = await axios.get(`${backendUrl}/api/v1/account/balance`, {
@@ -33,11 +44,14 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get(`${backendUrl}/api/v1/user/bulk?filter=${filter}`, {
-          headers: {
-            authorization: localStorage.getItem("token"),
+        const response = await axios.get(
+          `${backendUrl}/api/v1/user/bulk?filter=${filter}`,
+          {
+            headers: {
+              authorization: localStorage.getItem("token"),
+            },
           },
-        });
+        );
         setUser(response.data.users);
       } catch (error) {
         console.error(error);
@@ -46,8 +60,7 @@ export default function Dashboard() {
 
     fetchUsers();
   }, [filter]);
-  console.log(filter);
-  
+
   return (
     <div className="   mx-auto max-w-5xl  ">
       <div className="flex justify-between mt-6 bg-neutral-100 rounded-2xl ">
@@ -64,7 +77,8 @@ export default function Dashboard() {
       </div>
       <div className="text-xl font-medium mt-6 ml-4">
         <p>Users</p>
-        <input onChange={(e)=>setFilter(e.target.value)}
+        <input
+          onChange={(e) => setFilter(e.target.value)}
           placeholder="Search Users... "
           className=" w-full outline-none bg-gray-50 text-neutral-900  rounded-lg px-2 py-2 my-2 shadow-input"
         />
@@ -79,8 +93,8 @@ export default function Dashboard() {
 }
 
 function User({ user }: { user: UserType }) {
-  const navigate=useNavigate();
-  
+  const navigate = useNavigate();
+
   return (
     <div className="flex justify-between">
       <div className="flex">
@@ -97,10 +111,12 @@ function User({ user }: { user: UserType }) {
       </div>
 
       <div className="flex flex-col justify-center h-ful"></div>
-                  <Button label={"Send Money"} onClick={()=>{
-                    navigate(`/send?id=${user._id}&name=${user.firstName}` )
-                  }}/>
-
+      <Button
+        label={"Send Money"}
+        onClick={() => {
+          navigate(`/send?id=${user._id}&name=${user.firstName}`);
+        }}
+      />
     </div>
   );
 }

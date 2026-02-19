@@ -1,5 +1,4 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
-import logo from "../assets/user-icon.svg";
 import { useState } from "react";
 import axios from "axios";
 export default function Send() {
@@ -26,9 +25,15 @@ export default function Send() {
         },
       );
       setmessage(response.data.message);
+      console.log(message);
+
       navigate("/dashboard");
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      if (error.response) {
+        setmessage(error.response.data.message);
+      } else {
+        setmessage("Something went wrong");
+      }
     }
   }
   return (

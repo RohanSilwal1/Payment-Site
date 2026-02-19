@@ -32,7 +32,7 @@ router.post("/transfer", middlewares, async (req, res,) => {
     const { amount, to } = req.body;
 
     if (!amount || !to) {
-        return res.json({
+        return res.status(411).json({
             message: "please provide amount or transfer Name"
         })
     }
@@ -42,14 +42,14 @@ router.post("/transfer", middlewares, async (req, res,) => {
     if (!account) {
         await session.abortTransaction();
         
-        return res.json({
+        return res.status(411).json({
             message: "account didnot find"
         })
     }
     if (account.balance < amount) {
         await session.abortTransaction();
-        return res.json({
-            Message: "insufficient Balance"
+        return res.status(411).json({
+            message: "Insufficient Balance"
         })
     }
     
@@ -57,7 +57,7 @@ router.post("/transfer", middlewares, async (req, res,) => {
     
     if (!toAccount) {
         await session.abortTransaction();
-        return res.json({
+        return res.status(411).json({
             message: "Invalid Transfer account"
         })
     }
