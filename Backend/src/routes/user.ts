@@ -20,7 +20,7 @@ const router = express.Router();
 console.log("✅ user routes loaded");
 
 const SignupBody = z.object({
-    username: z.string().min(3, { message: "Email must be atleast three character long" }).max(20, { message: "Email must be no longer then 20" }),
+    username: z.string().min(3, { message: "Email must be atleast three character long" }).max(30, { message: "Email must be no longer then 30" }),
     password: z.string().min(8, { message: "Password must be 8 char long" }).max(30, { message: "Password must be longer than 30 characters" }).regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/, { message: "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character" }),
     firstName: z.string().min(3, { message: "First Name must be atleast three character long" }).max(20, { message: "First Name must be no longer then 20" }),
     lastName: z.string().min(3, { message: "Last Name must be atleast three character long" }).max(20, { message: "Last Name must be no longer then 20" }),
@@ -60,7 +60,7 @@ router.post("/signup", async (req, res) => {
 })
 
 const SigninBody = z.object({
-    username: z.string().min(3, { message: "Email must be atleast three character long" }).max(20, { message: "Email must be no longer then 20" }),
+    username: z.string().min(3, { message: "Email must be atleast three character long" }).max(30, { message: "Email must be no longer then 30" }),
     password: z.string().min(8, { message: "Password must be 8 char long" }).max(30, { message: "Password must be longer than 30 characters" }).regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/, { message: "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character" }),
 })
 
@@ -124,7 +124,7 @@ router.put("/", middlewares, async (req, res) => {
 
     }
 })
-router.get("/bulk",middlewares, async (req, res) => {
+router.get("/bulk", middlewares, async (req, res) => {
 
     const filter = (req.query.filter as string) || "";
 
