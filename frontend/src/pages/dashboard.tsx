@@ -14,7 +14,7 @@ export default function Dashboard() {
   const [balance, Setbalance] = useState(0);
   const [users, setUser] = useState<UserType[]>([]);
   const [filter, setFilter] = useState("");
-  const [FirstName, setFirstName] = useState("Hello");
+  const [FirstName, setFirstName] = useState("User");
 
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
