@@ -156,5 +156,19 @@ router.get("/test", async (req, res) => {
         message: "test is working"
     })
 })
+
+router.get("/username", middlewares, async (req, res) => {
+
+    const _id = req.userId;
+    try {
+        const users = await userModel.findById(_id).select("firstName");
+        if (!users) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        res.json({ firstName: users.firstName });
+    } catch (error: any) {
+        res.status(500).json({ error: error.message });
+    }
+});
 export default router;
 

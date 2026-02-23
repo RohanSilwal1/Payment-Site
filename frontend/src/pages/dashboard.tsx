@@ -14,6 +14,7 @@ export default function Dashboard() {
   const [balance, Setbalance] = useState(0);
   const [users, setUser] = useState<UserType[]>([]);
   const [filter, setFilter] = useState("");
+  const [FirstName, setFirstName] = useState("Hello");
 
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
@@ -60,14 +61,30 @@ export default function Dashboard() {
 
     fetchUsers();
   }, [filter]);
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.get(`${backendUrl}/api/v1/user/username`, {
+          headers: {
+            Authorization: `${token}`,
+          },
+        });
+        setFirstName(response.data.firstName);
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
+    fetchUser();
+  }, []);
   return (
     <div className="   mx-auto max-w-5xl  ">
       <div className="flex justify-between mt-6 bg-neutral-100 rounded-2xl ">
         <p className="text-2xl font-medium ml-4">Payment app</p>
         <div className="flex justify-center items-center gap-2 text-xl mr-4">
           <div>Hello,</div>
-          <div>User</div>
+          <div>{FirstName}</div>
           <UserLogo />
         </div>
       </div>
