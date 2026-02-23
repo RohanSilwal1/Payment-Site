@@ -64,10 +64,9 @@ export default function Dashboard() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const token = localStorage.getItem("token");
         const response = await axios.get(`${backendUrl}/api/v1/user/username`, {
           headers: {
-            authorization: `${token}`,
+            authorization: localStorage.getItem("token"),
           },
         });
         setFirstName(response.data.firstName);
