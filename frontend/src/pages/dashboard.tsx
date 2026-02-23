@@ -67,7 +67,7 @@ export default function Dashboard() {
         const token = localStorage.getItem("token");
         const response = await axios.get(`${backendUrl}/api/v1/user/username`, {
           headers: {
-            Authorization: `${token}`,
+            authorization: `${token}`,
           },
         });
         setFirstName(response.data.firstName);
